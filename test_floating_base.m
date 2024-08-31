@@ -1,8 +1,9 @@
-addpath('urdf');
 addpath('utility');
 addpath('resources/leg/urdf');
 addpath('resources/leg/meshes');
 addpath('gen_files');
+addpath('resources/g1/urdf');
+addpath('resources/g1/meshes');
 
 %% Robotic framework for floating base
 robot = importrobot('leg.urdf');
@@ -68,7 +69,7 @@ base_rot_matrix = quat2rotm(base_rot);
 
 target_orientation = quatmultiply([cos((0 * pi/ 180) / 2) sin((0 * pi/ 180) / 2) * [-1, 0, 0]], [cos((30 * pi/ 180) / 2) sin((30 * pi/ 180) / 2) * [0, 0, -1]]);
 base_constraint.TargetTransform = [
-    quat2rotm(target_orientation), [0.00; 0; 0.75];
+    quat2rotm([1, 0, 0, 0]), [0.03; 0; 0.84];
     0, 0, 0, 1;
 ];
 q_solution = ik_solver(q_init, base_constraint, left_toe_constraint, right_toe_constraint);
@@ -77,11 +78,17 @@ show(robot_with_floating_frame, q_solution, Visuals="on");
 axis equal;
 
 
+%% Test G1 humanoid robot
+robot = importrobot('g1.urdf');
+q = homeConfiguration(robot);
+% T = getTransform(robot, q, 'L_toe', 'base');
+robot_with_floating_frame = floatingBaseHelper();
+robot_with_floating_frame.Gravity = [0, 0, -9.81];
 
+addSubtree(robot_with_floating_frame, "floating_base_RZ", robot, ReplaceBase=false);
 
-
-
-
+show(robot, q, Collisions="on",Visuals="off");
+axis equal;
 
 
 

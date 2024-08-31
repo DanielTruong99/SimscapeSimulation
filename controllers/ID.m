@@ -20,10 +20,10 @@ function torque_ff = ID(input)
 
     % Calculate inverse dynamic
     % Torque ff from Robotic Toolbox
-    % torque_ff = inverseDynamics(leg_robot, q, q_dot, q_ddot_cmd) - J_right_toe.' * fr_right_cmd - J_left_toe.' * fr_left_cmd;
+    torque_ff = inverseDynamics(leg_robot, q, q_dot, q_ddot_cmd) - J_right_toe.' * fr_right_cmd - J_left_toe.' * fr_left_cmd;
     
     % Torque ff from my approach
     % torque_ff = computeM(q) * q_ddot_cmd + computeH(q, q_dot) - J_right_toe.' * fr_right_cmd - J_left_toe.' * fr_left_cmd;
     % 
-    % torque_ff = torque_ff(7:end);
+    torque_ff = torque_ff(7:end);
 end
